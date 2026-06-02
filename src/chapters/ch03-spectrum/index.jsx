@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useCanvasAnimation } from '../../hooks/useCanvasAnimation.js'
 import { useAudioEngine } from '../../hooks/useAudioEngine.js'
+import { useUnlock } from '../../achievements/AchievementContext.jsx'
 import { PALETTE, TWO_PI } from '../../constants/index.js'
 
 // 第三章:从"指纹"到"谱" —— 建立时域↔频域的一一对应,理解频谱图。
@@ -47,6 +48,7 @@ export default function Spectrum() {
 
   const circlesRef = useRef([]) // 最近一帧时域圆几何,供命中
   const dragRef = useRef(null) // { kind: 'time' | 'freq', index }
+  const unlock = useUnlock()
 
   const { enabled, enable, disable, sync } = useAudioEngine()
 
@@ -132,6 +134,7 @@ export default function Spectrum() {
   const randomizePhases = () => {
     setPhases(Array.from({ length: N }, () => Math.random() * TWO_PI))
     setRandomized(true)
+    unlock('phase-chaos')
   }
   const resetPhases = () => {
     setPhases(new Array(N).fill(0))
@@ -149,7 +152,14 @@ export default function Spectrum() {
         <button
           type="button"
           className={enabled ? 'btn' : 'btn btn--ghost'}
-          onClick={enabled ? disable : enable}
+          onClick={() => {
+            if (enabled) {
+              disable()
+            } else {
+              enable()
+              unlock('sound-on')
+            }
+          }}
         >
           {enabled ? '🔊 声音:开' : '🔈 开启声音'}
         </button>

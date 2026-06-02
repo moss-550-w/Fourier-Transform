@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Slider from '../../components/Slider.jsx'
 import FormulaCard from '../../components/FormulaCard.jsx'
 import { useCanvasAnimation } from '../../hooks/useCanvasAnimation.js'
+import { useUnlock } from '../../achievements/AchievementContext.jsx'
 import { PALETTE } from '../../constants/index.js'
 
 // 第四章:通往连续的桥梁 —— 非周期信号是"周期无限长"的周期信号。
@@ -26,6 +27,12 @@ export default function BridgeToContinuous() {
   const f0 = 1 / period // 基频 = 谱线间隔 Δf
   const ratio = (period - T_RANGE.min) / (T_RANGE.max - T_RANGE.min)
   const nearInfinity = ratio >= NEAR_INFINITY
+
+  const unlock = useUnlock()
+  // 拉到极限触发 ∑→∫ 时解锁
+  useEffect(() => {
+    if (nearInfinity) unlock('reach-infinity')
+  }, [nearInfinity, unlock])
 
   // 时域:矩形脉冲串(静态依赖 state,逐帧重画以反映最新 period)
   const timeCanvasRef = useCanvasAnimation(({ ctx, width, height }) => {

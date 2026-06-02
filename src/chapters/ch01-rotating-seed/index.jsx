@@ -3,6 +3,7 @@ import Slider from '../../components/Slider.jsx'
 import ToggleSwitch from '../../components/ToggleSwitch.jsx'
 import FormulaCard from '../../components/FormulaCard.jsx'
 import { useCanvasAnimation } from '../../hooks/useCanvasAnimation.js'
+import { useUnlock } from '../../achievements/AchievementContext.jsx'
 import { PARAM_RANGES, PALETTE, SEMANTIC_COLORS, TWO_PI } from '../../constants/index.js'
 
 // 第一章:旋转的种子 —— 一个圆,造出所有波。
@@ -30,6 +31,13 @@ export default function RotatingSeed() {
   const [phase, setPhase] = useState(PARAM_RANGES.phase.default)
   const [mode, setMode] = useState('full')
   const [activeTerm, setActiveTerm] = useState(null)
+  const unlock = useUnlock()
+
+  // 切到「完整旋转矢量」视角(虚实合一)时解锁成就
+  const handleMode = (value) => {
+    setMode(value)
+    if (value === 'full') unlock('rotor-full')
+  }
 
   const canvasRef = useCanvasAnimation(({ ctx, width, height, time }) => {
     drawScene(ctx, width, height, time, { amplitude, frequency, phase, mode, activeTerm })
@@ -46,7 +54,7 @@ export default function RotatingSeed() {
         label="虚实分离:选择观察视角"
         options={VIEW_MODES}
         value={mode}
-        onChange={setMode}
+        onChange={handleMode}
       />
 
       <div className="chapter__stage">

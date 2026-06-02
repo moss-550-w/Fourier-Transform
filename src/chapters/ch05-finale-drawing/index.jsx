@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { useCanvasAnimation } from '../../hooks/useCanvasAnimation.js'
+import { useUnlock } from '../../achievements/AchievementContext.jsx'
 import { dft2d } from '../../engine/fft.js'
 import { PALETTE, TWO_PI } from '../../constants/index.js'
 
@@ -68,6 +69,7 @@ export default function FinaleDrawing() {
   const [hasResult, setHasResult] = useState(false)
   const [bridgeOpen, setBridgeOpen] = useState(true) // 首次进入展示知识桥接
   const [selectedFreq, setSelectedFreq] = useState(null)
+  const unlock = useUnlock()
 
   const rawPointsRef = useRef([]) // 手绘原始点(CSS 像素)
   const drawingRef = useRef(false)
@@ -119,6 +121,7 @@ export default function FinaleDrawing() {
     playStartRef.current = 0
     setSelectedFreq(null)
     setHasResult(true)
+    unlock('draw-anything')
   }
 
   const reset = () => {

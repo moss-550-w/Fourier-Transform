@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { chapters } from './chapters/index.js'
+import ComparisonLab from './components/ComparisonLab.jsx'
+import AchievementPanel from './components/AchievementPanel.jsx'
+import { useAchievements, useUnlock } from './achievements/AchievementContext.jsx'
 
 // 分页式叙事容器:一次只挂载当前章(切换时 key 变化 → 卸载旧章,清理其 rAF/音频)。
 // 导航三通道:① 底部按钮 ② 键盘左右箭头 ③ 触屏左右滑动手势(移动优先)。
@@ -10,7 +13,17 @@ const SWIPE_SLOP = 40 // 纵向位移超此值视为滚动而非横滑,放弃切
 export default function App() {
   const [index, setIndex] = useState(0)
   const [dir, setDir] = useState(0) // 进场方向:1=向后翻、-1=向前翻,驱动切换动画
+  const [labOpen, setLabOpen] = useState(false)
+  const [panelOpen, setPanelOpen] = useState(false)
   const touchRef = useRef(null) // { x, y } 触摸起点
+
+  const { toast } = useAchievements()
+  const unlock = useUnlock()
+
+  const openLab = () => {
+    setLabOpen(true)
+    unlock('lab-compare')
+  }
 
   const { id, title, Component } = chapters[index]
   const atStart = index === 0
@@ -59,6 +72,18 @@ export default function App() {
         跳到主内容
       </a>
 
+      <header className="app__toolbar">
+        <span className="app__brand">看见傅里叶</span>
+        <div className="app__tools">
+          <button type="button" className="app__tool-btn" onClick={openLab}>
+            ⚖ 对比实验室
+          </button>
+          <button type="button" className="app__tool-btn" onClick={() => setPanelOpen(true)}>
+            🏅 成就
+          </button>
+        </div>
+      </header>
+
       <section
         className="app__viewport"
         id="viewport"
@@ -93,6 +118,21 @@ export default function App() {
           →
         </button>
       </nav>
+
+      {labOpen && <ComparisonLab onClose={() => setLabOpen(false)} />}
+      {panelOpen && <AchievementPanel onClose={() => setPanelOpen(false)} />}
+
+      {toast && (
+        <div className="achievement-toast" role="status">
+          <span className="achievement-toast__icon" aria-hidden="true">
+            🏅
+          </span>
+          <span className="achievement-toast__body">
+            <span className="achievement-toast__label">成就解锁</span>
+            <span className="achievement-toast__name">{toast.name}</span>
+          </span>
+        </div>
+      )}
     </div>
   )
 }

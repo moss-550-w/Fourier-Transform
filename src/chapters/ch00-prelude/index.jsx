@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useCanvasAnimation } from '../../hooks/useCanvasAnimation.js'
 import { useAudioEngine } from '../../hooks/useAudioEngine.js'
+import { useUnlock } from '../../achievements/AchievementContext.jsx'
 import { PALETTE, A4_FREQUENCY } from '../../constants/index.js'
 
 // 序幕:声音的配方 —— 三种乐器演奏同一个 A4(440Hz)。
@@ -25,6 +26,7 @@ export default function Prelude() {
   const [active, setActive] = useState('piano')
   const { enabled, enable, disable, sync } = useAudioEngine()
   const stopTimerRef = useRef(null)
+  const unlock = useUnlock()
 
   const recipe = INSTRUMENTS.find((ins) => ins.id === active).recipe
 
@@ -42,6 +44,7 @@ export default function Prelude() {
     sync(toHarmonics(instrument.recipe))
     clearTimeout(stopTimerRef.current)
     stopTimerRef.current = setTimeout(() => disable(), PLAY_SECONDS * 1000)
+    unlock('prelude-listen')
   }
 
   return (

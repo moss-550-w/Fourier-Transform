@@ -4,6 +4,7 @@ import ToggleSwitch from '../../components/ToggleSwitch.jsx'
 import FormulaCard from '../../components/FormulaCard.jsx'
 import DerivationWizard from './DerivationWizard.jsx'
 import { useCanvasAnimation } from '../../hooks/useCanvasAnimation.js'
+import { useUnlock } from '../../achievements/AchievementContext.jsx'
 import { PARAM_RANGES, PALETTE, TWO_PI } from '../../constants/index.js'
 
 // 第二章:圆舞曲(谐波雕塑家) —— 一系列首尾相连的旋转圆,其末端垂直投影雕刻出周期波形。
@@ -56,6 +57,14 @@ export default function Harmonics() {
   const [speed, setSpeed] = useState(PARAM_RANGES.animationSpeed.default)
   const [hovered, setHovered] = useState(null)
   const [wizardOpen, setWizardOpen] = useState(false)
+  const unlock = useUnlock()
+
+  // 谐波数加到 30 以上 → 解锁;统一经此包装设置
+  const handleHarmonicCount = (value) => {
+    const n = Math.round(value)
+    setHarmonicCount(n)
+    if (n >= 30) unlock('harmonics-many')
+  }
 
   // 最近一帧各圆的几何(CSS 像素),供指针命中测试;不进 state,避免逐帧重渲染
   const circlesRef = useRef([])
@@ -129,7 +138,7 @@ export default function Harmonics() {
           min={PARAM_RANGES.harmonicCount.min}
           max={PARAM_RANGES.harmonicCount.max}
           step={PARAM_RANGES.harmonicCount.step}
-          onChange={(v) => setHarmonicCount(Math.round(v))}
+          onChange={(v) => handleHarmonicCount(v)}
         />
         <Slider
           label="动画速度(慢动作拨盘)"
@@ -150,7 +159,12 @@ export default function Harmonics() {
 
       <FormulaCard latex={'f(t) = A_0 + \\sum_{k=1}^{N} A_k \\sin(2\\pi k f_0 t + \\varphi_k)'} />
 
-      {wizardOpen && <DerivationWizard onClose={() => setWizardOpen(false)} />}
+      {wizardOpen && (
+        <DerivationWizard
+          onClose={() => setWizardOpen(false)}
+          onComplete={() => unlock('derivation-done')}
+        />
+      )}
     </div>
   )
 }

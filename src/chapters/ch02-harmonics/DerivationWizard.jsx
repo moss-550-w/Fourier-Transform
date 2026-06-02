@@ -48,9 +48,14 @@ const STEPS = [
   },
 ]
 
-export default function DerivationWizard({ onClose }) {
+export default function DerivationWizard({ onClose, onComplete }) {
   const [step, setStep] = useState(0)
   const show = STEPS[step].show
+
+  const finish = () => {
+    onComplete?.()
+    onClose()
+  }
 
   const canvasRef = useCanvasAnimation(({ ctx, width, height }) => {
     drawDerivation(ctx, width, height, show)
@@ -100,7 +105,7 @@ export default function DerivationWizard({ onClose }) {
               下一步
             </button>
           ) : (
-            <button type="button" className="btn" onClick={onClose}>
+            <button type="button" className="btn" onClick={finish}>
               完成
             </button>
           )}
