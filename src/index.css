@@ -342,3 +342,29 @@ body {
 .leap-banner strong {
   color: var(--color-accent);
 }
+
+/* 终章:一维↔二维 知识桥接弹窗 */
+.bridge-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.bridge-cell {
+  padding: 14px;
+  background: var(--color-bg);
+  border-radius: var(--radius);
+  text-align: center;
+}
+.bridge-cell p {
+  margin: 6px 0 0;
+  font-weight: 600;
+}
+.bridge-cell__tag {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.bridge-cell__sub {
+  font-size: 0.8rem;
+  font-weight: 400 !important;
+  color: var(--color-muted);
+}
