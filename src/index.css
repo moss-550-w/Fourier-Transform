@@ -7,10 +7,15 @@
   --color-accent: #f5a623; /* 橙:负/虚部/高频 */
   --color-muted: #5c6370;
 
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC",
-    "Microsoft YaHei", sans-serif;
+  --radius: 12px;
+  --gap: 16px;
+  --maxw: 720px; /* 移动优先,桌面端内容居中收窄 */
+
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'PingFang SC',
+    'Microsoft YaHei', sans-serif;
   color: var(--color-text);
   background: var(--color-bg);
+  line-height: 1.5;
 }
 
 * {
@@ -28,4 +33,199 @@ body,
 body {
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior: none;
+}
+
+/* ===== 分页式应用框架 ===== */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+
+.app__viewport {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--gap);
+}
+
+.app__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap);
+  padding: 12px var(--gap);
+  border-top: 1px solid #ffffff14;
+  background: var(--color-surface);
+}
+
+.app__nav-btn {
+  min-width: 56px;
+  min-height: 44px; /* 触屏热区 */
+  font-size: 1.25rem;
+  color: var(--color-text);
+  background: #ffffff10;
+  border: 1px solid #ffffff1f;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.app__nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.app__nav-btn:not(:disabled):hover {
+  background: #ffffff1f;
+}
+
+.app__progress {
+  flex: 1;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+/* ===== 章节通用布局 ===== */
+.chapter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.chapter__title {
+  margin: 0;
+  font-size: 1.35rem;
+  color: var(--color-primary);
+}
+
+.chapter__goal {
+  margin: 4px 0 0;
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.chapter__stage {
+  width: 100%;
+  height: clamp(300px, 52vh, 480px);
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.canvas-surface {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none; /* 画布内自定义手势,禁用浏览器默认滚动/缩放 */
+}
+
+.chapter__controls {
+  display: grid;
+  gap: 8px;
+}
+
+.chapter__hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+/* ===== Slider ===== */
+.slider__label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+.slider__value {
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+}
+.slider__input {
+  accent-color: var(--color-primary);
+}
+
+/* ===== ToggleSwitch(分段开关) ===== */
+.toggle-switch {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: #ffffff0d;
+  border-radius: var(--radius);
+}
+.toggle-switch__segment {
+  flex: 1;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: calc(var(--radius) - 4px);
+}
+.toggle-switch__segment.is-active {
+  color: var(--color-text);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.toggle-switch__segment:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ===== FormulaCard ===== */
+.formula-card {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding: 12px var(--gap);
+}
+.formula-card__display {
+  color: var(--color-text);
+  overflow-x: auto;
+}
+.formula-card__terms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.formula-card__term {
+  padding: 6px 12px;
+  color: var(--color-text);
+  background: #ffffff10;
+  border: 1px solid #ffffff1f;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.formula-card__term.is-active {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px #f5a62355 inset;
+}
+.formula-card__term:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ===== 章节内分组(波形选择、向导按钮等复用) ===== */
+.control-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.btn {
+  min-height: 44px;
+  padding: 0 18px;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  background: var(--color-primary);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.btn--ghost {
+  background: #ffffff10;
+  border: 1px solid #ffffff1f;
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }

@@ -7,7 +7,7 @@
 面向**零高等数学基础**用户的交互式科普网站，通过几何直觉与主动探索讲透傅里叶变换。核心体验路径：**看见波形 → 触碰频率 → 在频域中思考**。
 
 - 产品形态：纯静态单页应用（SPA），移动端优先，左右滑动切换章节。
-- 当前状态：**仅有设计文档，尚无代码**。从零搭建脚手架时遵循下方技术栈。
+- 当前状态：**脚手架已就绪（Vite + React），各章节为占位骨架**，主交互待逐章实现（见第六节）。
 
 ## 二、技术栈（强制）
 
@@ -71,9 +71,56 @@
 - 数学/物理量统一命名（如 `amplitude`、`frequency`、`phase`、`omega`、`harmonicCount`），全项目一致。
 - 修改保持向下兼容，不破坏已通过验收的章节交互。
 
-## 八、待补充（脚手架建立后回填本节）
+## 八、命令与目录结构
 
-- [ ] 构建/开发/预览命令（如 `npm run dev` / `build` / `preview`）
-- [ ] 代码检查与格式化命令（lint / format）
-- [ ] 测试命令与策略
-- [ ] 目录结构最终落地说明
+### 常用命令
+
+```bash
+npm install      # 安装依赖
+npm run dev      # 本地开发（Vite dev server，默认 http://localhost:5173）
+npm run build    # 生产构建，产物输出到 dist/
+npm run preview  # 本地预览构建产物
+```
+
+依赖版本基线：React 19、Vite 8、KaTeX 0.17。
+
+> lint / format / test 尚未接入。后续引入 ESLint + Prettier、Vitest 后回填命令。
+
+### 目录结构
+
+```
+.
+├── index.html              # 入口 HTML
+├── vite.config.js          # Vite 配置（@vitejs/plugin-react）
+├── design.md               # 完整设计方案（需求与体验细节的唯一权威来源）
+├── CLAUDE.md               # 本文件：开发约定
+└── src/
+    ├── main.jsx            # React 挂载入口
+    ├── App.jsx             # 分页式叙事容器（按 chapters 顺序渲染）
+    ├── index.css           # 全局样式 + 蓝橙配色 CSS 变量
+    ├── constants/
+    │   └── index.js        # 全局常量：PALETTE、参数范围、A4=440 等（消灭魔法值）
+    ├── engine/             # 命令式底层引擎（与 React 解耦）
+    │   ├── animationLoop.js  # rAF 循环管理，支持慢动作倍率
+    │   ├── canvas.js         # Canvas2D 初始化（DPR 缩放 + resize）
+    │   ├── fft.js            # 复数 DFT/IDFT 与 dft2d（终章绘图）
+    │   └── audio.js          # Web Audio 引擎（惰性 AudioContext + Analyser）
+    ├── components/         # 可复用 UI 组件（可访问 + 触屏优先）
+    │   ├── Slider.jsx        # 范围滑块
+    │   ├── ToggleSwitch.jsx  # N 段分段开关（如"虚实分离"三段式）
+    │   └── FormulaCard.jsx   # KaTeX 公式卡片，支持分项点击高亮
+    └── chapters/           # 各章节模块，互相解耦
+        ├── index.js          # 导出有序 chapters 数组 [{ id, title, Component }]
+        ├── ch00-prelude/         # 序幕：声音的配方
+        ├── ch01-rotating-seed/   # 第一章：旋转的种子
+        ├── ch02-harmonics/       # 第二章：圆舞曲（谐波雕塑家）
+        ├── ch03-spectrum/        # 第三章：从"指纹"到"谱"
+        ├── ch04-bridge-to-continuous/  # 第四章：通往连续的桥梁
+        └── ch05-finale-drawing/  # 终章：神笔傅里叶
+```
+
+### 约定补充
+
+- 新增章节：在 `src/chapters/` 下建目录写 `index.jsx`（默认导出组件），并在 `src/chapters/index.js` 的 `chapters` 数组中按叙事顺序登记 `{ id, title, Component }`。
+- 章节业务组件可依赖 `engine/`、`components/`、`constants/`；`engine/` 为纯命令式模块，**不得反向依赖 React 组件**。
+- 当前各章节为占位骨架，主交互逐章按 design.md 落地（见第六节迭代路线）。
