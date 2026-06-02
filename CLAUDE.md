@@ -7,7 +7,7 @@
 面向**零高等数学基础**用户的交互式科普网站，通过几何直觉与主动探索讲透傅里叶变换。核心体验路径：**看见波形 → 触碰频率 → 在频域中思考**。
 
 - 产品形态：纯静态单页应用（SPA），移动端优先，左右滑动切换章节。
-- 当前状态：**脚手架已就绪（Vite + React），各章节为占位骨架**，主交互待逐章实现（见第六节）。
+- 当前状态：**alpha + beta 已实现**（第一、二、三章交互完成，含 Web Audio 视听同步）；序幕、第四章、终章为占位骨架。
 
 ## 二、技术栈（强制）
 
@@ -100,6 +100,9 @@ npm run preview  # 本地预览构建产物
     ├── index.css           # 全局样式 + 蓝橙配色 CSS 变量
     ├── constants/
     │   └── index.js        # 全局常量：PALETTE、参数范围、A4=440 等（消灭魔法值）
+    ├── hooks/              # engine 与 React 的适配层（engine 仍零 React 依赖）
+    │   ├── useCanvasAnimation.js  # 绑定 canvas + rAF 循环,组件只写纯绘制函数
+    │   └── useAudioEngine.js      # 管理音频生命周期 + 用户手势开关 + 节流同步
     ├── engine/             # 命令式底层引擎（与 React 解耦）
     │   ├── animationLoop.js  # rAF 循环管理，支持慢动作倍率
     │   ├── canvas.js         # Canvas2D 初始化（DPR 缩放 + resize）

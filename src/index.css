@@ -281,3 +281,30 @@ body {
   justify-content: space-between;
   gap: 8px;
 }
+
+/* 破坏性实验按钮:用橙(accent)而非红,避免红绿语义编码 */
+.btn--accent {
+  background: var(--color-accent);
+  color: #1a1d27;
+  font-weight: 600;
+}
+
+/* 第三章结论:随机化相位后高亮浮现 */
+.chapter__conclusion {
+  margin: 0;
+  padding: 12px var(--gap);
+  font-size: 0.95rem;
+  color: var(--color-muted);
+  background: #ffffff08;
+  border-left: 3px solid transparent;
+  border-radius: var(--radius);
+  transition: color 0.3s, border-color 0.3s, background 0.3s;
+}
+.chapter__conclusion.is-active {
+  color: var(--color-text);
+  background: #f5a62318;
+  border-left-color: var(--color-accent);
+}
+.chapter__conclusion strong {
+  color: var(--color-accent);
+}
