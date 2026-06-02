@@ -368,3 +368,101 @@ body {
   font-weight: 400 !important;
   color: var(--color-muted);
 }
+
+/* ===== 序幕:乐器选择 ===== */
+.instrument-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.instrument-btn {
+  flex: 1;
+  min-width: 96px;
+  min-height: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--color-text);
+  background: #ffffff10;
+  border: 1px solid #ffffff1f;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.instrument-btn.is-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.instrument-btn__name {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.instrument-btn__note {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+}
+.instrument-btn.is-active .instrument-btn__note {
+  color: #ffffffcc;
+}
+
+/* ===== 切章进场动画(data-dir 决定方向) ===== */
+@keyframes slide-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes slide-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.app__viewport[data-dir='1'] {
+  animation: slide-from-right 0.28s ease;
+}
+.app__viewport[data-dir='-1'] {
+  animation: slide-from-left 0.28s ease;
+}
+
+/* ===== 可访问性:跳转链接 + 统一焦点可见态 ===== */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  z-index: 100;
+  padding: 8px 14px;
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: var(--radius);
+  text-decoration: none;
+}
+.skip-link:focus {
+  left: 8px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* 尊重系统"减少动态效果"偏好:关闭装饰性过渡与切章动画 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
