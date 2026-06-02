@@ -308,3 +308,37 @@ body {
 .chapter__conclusion strong {
   color: var(--color-accent);
 }
+
+/* 第四章:参数动态读数行 */
+.param-readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+.param-readout strong {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* 第四章:T→∞ 飞跃横幅,趋近极限时高亮 */
+.leap-banner {
+  margin: 0;
+  padding: 12px var(--gap);
+  font-size: 0.95rem;
+  color: var(--color-muted);
+  background: #ffffff08;
+  border-radius: var(--radius);
+  border: 1px dashed #ffffff1f;
+  transition: all 0.3s;
+}
+.leap-banner.is-active {
+  color: var(--color-text);
+  background: #f5a62318;
+  border: 1px solid var(--color-accent);
+}
+.leap-banner strong {
+  color: var(--color-accent);
+}
