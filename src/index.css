@@ -1,0 +1,31 @@
+/* 全局基础样式与配色变量(色盲友好:蓝-橙主色,禁用红绿区分关键信息) */
+:root {
+  --color-bg: #0f1117;
+  --color-surface: #1a1d27;
+  --color-text: #e8eaf0;
+  --color-primary: #4a90e2; /* 蓝:正/实部/低频 */
+  --color-accent: #f5a623; /* 橙:负/虚部/高频 */
+  --color-muted: #5c6370;
+
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+}
+
+/* 触屏优先:禁止误触缩放/选择,交互元素单独放开 */
+body {
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
